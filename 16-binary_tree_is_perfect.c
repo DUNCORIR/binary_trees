@@ -18,6 +18,26 @@ size_t binary_tree_height(const binary_tree_t *tree)
 }
 
 /**
+ * binary_tree_is_full - Checks if a binary tree is full
+ * @tree: Pointer to the root node of the tree to check
+ *
+ * Return: 1 if the tree is full, 0 otherwise
+ */
+int binary_tree_is_full(const binary_tree_t *tree)
+{
+	if (tree == NULL)
+		return (1);  /* An empty tree is considered full */
+
+	if (tree->left == NULL && tree->right == NULL)
+		return (1);  /* A leaf node is considered full */
+
+	if (tree->left != NULL && tree->right != NULL)
+		return (binary_tree_is_full(tree->left) && binary_tree_is_full(tree->right));
+
+	return (0);  /* If one child is missing, it's not a full tree */
+}
+
+/**
  * binary_tree_is_perfect - Checks if a binary tree is perfect
  * @tree: Pointer to the root node of the tree to check
  *
@@ -26,15 +46,14 @@ size_t binary_tree_height(const binary_tree_t *tree)
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
 	if (tree == NULL)
-		return (0);
+		return (0);  /* A NULL tree is not perfect */
 
 	size_t left_height = binary_tree_height(tree->left);
 	size_t right_height = binary_tree_height(tree->right);
 
-	/* Check if heights are equal and both subtrees are perfect */
-	if (left_height == right_height)
-		return (binary_tree_is_perfect(tree->left) &&
-				binary_tree_is_perfect(tree->right));
+	/* Check if both subtrees have the same height and both are full */
+	if (left_height == right_height && binary_tree_is_full(tree))
+		return (1);
 
 	return (0);
 }
